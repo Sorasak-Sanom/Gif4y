@@ -312,7 +312,7 @@
   <p id="finalText"></p>
 </div>
 
-<audio id="music"><source src="assets/music.mp3" type="audio/mpeg"></audio>
+<audio id="music" preload="auto"></audio>
 
 <script>
 const loveText=`เธอเป็นคนที่น่ารักสดใสมากๆ ดูร่าเริงตลอดเวลา ✨
@@ -580,20 +580,58 @@ function explodeFirework(x, y, type){
   }
 }
 
+/* ===== ระบบเล่นเพลง 2 เพลงแบบวนลูป ===== */
+
+const playlist = [
+  "assets/music1.mp3",
+  "assets/music2.mp3"
+];
+
+let currentTrack = 0;
+const audio = document.getElementById("music");
+
+audio.src = playlist[currentTrack];
+
+// เมื่อเพลงจบ
+audio.addEventListener("ended", () => {
+
+  currentTrack++;
+  if (currentTrack >= playlist.length) {
+    currentTrack = 0;
+  }
+
+  // ดีเลย์ 3 วิ ก่อนเล่นเพลงถัดไป
+  setTimeout(() => {
+    audio.src = playlist[currentTrack];
+    audio.play().catch(() => {});
+  }, 3000);
+
+});
+
 function yesAnswer(){
   question.style.display='none';
   final.style.display='block';
-  const audio=document.getElementById('music');
-  if(audio) audio.play().catch(()=>{});
+  audio.play().catch(() => {});
 
-  const ending=`สุขสันต์วันเกิดและวันวาเลนไทน์นะและวันนี้จะเป็นวันครบรอบของเราด้วย 💖
-เค้าอยากให้เธอรู้ว่าเธอคือคนสำคัญที่สุด เป็นเหมือนโลกทั้งใบของเค้า
+const ending = `เย่เย่ๆ 🎉  
+สุขสันต์วันเกิด🎂 และสุขสันต์วันวาเลนไทน์นะ  
+และวันนี้ยังเป็นวันครบรอบของเราด้วยนะ💞
 
-ขอให้ทุกวันของเธอเต็มไปด้วยรอยยิ้ม
-เสียงหัวเราะ และความสุขเล็กๆ รอบตัว
+เค้าอยากให้เธอรู้ว่า  
+เธอคือคนที่สำคัญที่สุดในชีวิตของเค้า  
+เป็นเหมือนโลกทั้งใบ เป็นรอยยิ้ม และเป็นความสุขในทุกๆ วันเลย✨
 
-เค้าจะอยู่ข้างๆ คอยดูแล คอยซัพพอร์ต
-และคอยรักเธอแบบนี้ไปทุกวันเลยนะ`;
+ขอให้ทุกวันของเธอ  
+เต็มไปด้วยรอยยิ้ม  
+เสียงหัวเราะ  
+และความสุขเล็กๆ ที่อบอุ่นหัวใจเสมอ 
+
+เค้าจะอยู่ข้างๆ  
+คอยดูแล คอยซัพพอร์ต  
+และคอยรักเธอแบบนี้ไปทุกวันเลยนะ 
+
+ขอบคุณที่เกิดมา  
+และขอบคุณที่เข้ามาเป็นโลกของเค้า 💖`;
 
   let j=0;
   const box=document.getElementById('finalText');

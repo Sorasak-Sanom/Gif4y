@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For วราจัง 🤍</title>
+  <style>
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      height:100vh;display:flex;justify-content:center;align-items:center;
+      overflow:hidden;background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    }
+    .card{
+      background:#fff;border-radius:24px;padding:20px;width:90%;max-width:360px;
+      text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.15);
+      animation:float 4s ease-in-out infinite;position:relative;z-index:3;
+      max-height:85vh;overflow-y:auto;
+      scroll-behavior:smooth; /* เลื่อนแบบนุ่มนวล */
+    }
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    h1{font-size:1.4rem;color:#ff4d6d;margin:10px 0}
+    p{color:#555;line-height:1.6;margin:10px 0}
+
+    button{
+      background:#ff4d6d;border:none;border-radius:999px;
+      padding:12px 20px;color:#fff;font-size:1rem;cursor:pointer;margin:6px
+    }
+
+    .photo-main{width:100%;border-radius:18px;margin-bottom:12px;object-fit:cover}
+
+    .confess{max-height:280px;overflow-y:auto;text-align:left;padding:10px;margin:10px 0}
+
+    /* ===== รูปลอย (ลูป) ===== */
+    .floating-photo{
+      position:fixed;
+      bottom:-120px;
+      width:110px;
+      border-radius:16px;
+      opacity:0;
+      animation:floatUp 10s linear forwards;
+      pointer-events:none;
+      z-index:1;
+    }
+    @keyframes floatUp{
+      0%{transform:translateY(0) scale(0.9);opacity:0}
+      10%{opacity:0.8}
+      80%{opacity:0.6}
+      100%{transform:translateY(-120vh) scale(1.05);opacity:0}
+    }
+
+    /* ===== พลุแบบใหม่ - สมจริงกว่า ===== */
+    .rocket{
+      position:fixed;
+      bottom:0;
+      width:3px;height:15px;
+      background:linear-gradient(180deg, #fff, #ffeb3b);
+      box-shadow:0 0 10px #fff, 0 0 20px #ffeb3b;
+      animation:launch 1s ease-out forwards;
+      z-index:1;
+    }
+    .rocket::after{
+      content:'';
+      position:absolute;
+      bottom:-8px;
+      left:50%;
+      transform:translateX(-50%);
+      width:0;
+      height:0;
+      border-left:3px solid transparent;
+      border-right:3px solid transparent;
+      border-top:8px solid #ff6b35;
+      filter:blur(1px);
+    }
+    @keyframes launch{
+      0%{transform:translateY(0) scale(1);opacity:1}
+      100%{transform:translateY(-65vh) scale(0.8);opacity:0.3}
+    }
+
+    /* พลุระเบิดแบบต่างๆ */
+    .spark{
+      position:fixed;
+      width:3px;height:3px;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:1;
+    }
+    
+    /* พลุแบบดาว */
+    .spark.star{
+      animation:sparkStar 1.5s ease-out forwards;
+      box-shadow:0 0 4px currentColor, 0 0 8px currentColor;
+    }
+    @keyframes sparkStar{
+      0%{transform:translate(0,0) scale(1.5);opacity:1}
+      100%{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
+    }
+
+    /* พลุแบบวงกลม */
+    .spark.circle{
+      animation:sparkCircle 1.8s ease-out forwards;
+      width:4px;height:4px;
+      box-shadow:0 0 6px currentColor;
+    }
+    @keyframes sparkCircle{
+      0%{transform:translate(0,0) scale(1);opacity:1}
+      50%{opacity:0.8}
+      100%{transform:translate(var(--x),var(--y)) scale(0.5);opacity:0}
+    }
+
+    /* พลุแบบ Willow (หางยาว) */
+    .spark.willow{
+      width:2px;height:20px;
+      border-radius:2px;
+      animation:sparkWillow 2s ease-out forwards;
+      box-shadow:0 0 3px currentColor;
+    }
+    @keyframes sparkWillow{
+      0%{transform:translate(0,0) rotate(var(--rot));opacity:1}
+      100%{transform:translate(var(--x),calc(var(--y) + 100px)) rotate(calc(var(--rot) + 90deg));opacity:0}
+    }
+
+    /* พลุแบบหัวใจ */
+    .spark.heart{
+      width:6px;height:6px;
+      animation:sparkHeart 2s ease-out forwards;
+    }
+    @keyframes sparkHeart{
+      0%{transform:translate(0,0) scale(1.2);opacity:1}
+      100%{transform:translate(var(--x),var(--y)) scale(0);opacity:0}
+    }
+
+    /* ===== หัวใจลอย (ลูป) ===== */
+    .floating-heart{
+      position:fixed;
+      bottom:-60px;
+      font-size:30px;
+      opacity:0;
+      animation:heartFloat 8s ease-in forwards;
+      pointer-events:none;
+      z-index:2;
+    }
+    @keyframes heartFloat{
+      0%{transform:translateY(0) rotate(0deg);opacity:0}
+      10%{opacity:0.9}
+      70%{opacity:0.8}
+      100%{transform:translateY(-120vh) rotate(360deg);opacity:0}
+    }
+
+    .shake{animation:shake .4s}
+    @keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}}
+
+    .btn-wrap{position:relative;height:70px}
+    #noBtn{position:absolute}
+  </style>
+</head>
+<body>
+
+<!-- หน้าแรก -->
+<div class="card" id="home">
+  <img src="assets/7.jpg" class="photo-main">
+  <h1>ถึง Waralak Inteim 💕</h1>
+  <p>เค้ามีอะไรอยากบอกเธอ…</p>
+  <button onclick="openLetter()">อ่านจดหมาย💌</button>
+</div>
+
+<!-- หน้าสารภาพใจ (รูปเดียว) -->
+<div class="card" id="letter" style="display:none">
+  <h1>จากใจของเค้า 🤍</h1>
+  <img src="assets/2.jpg" class="photo-main">
+  <div class="confess" id="confess"></div>
+  <button onclick="goQuestion()">อ่านจบแล้ว 👉</button>
+</div>
+
+<!-- หน้าคำถาม -->
+<div class="card" id="question" style="display:none">
+  <h1>เป็นแฟนกันไหม 💕</h1>
+  <div class="btn-wrap">
+    <button onclick="yesAnswer()">เป็น 💖</button>
+    <button id="noBtn">ไม่เป็น 😔</button>
+  </div>
+</div>
+
+<!-- หน้าปิดท้าย -->
+<div class="card" id="final" style="display:none">
+  <img src="assets/18.JPG" class="photo-main">
+  <p id="finalText"></p>
+</div>
+
+<audio id="music"><source src="assets/music.mp3" type="audio/mpeg"></audio>
+
+<script>
+const loveText=`เธอเป็นคนที่น่ารักสดใสมากๆ ดูร่าเริงตลอดเวลา ✨
+เห็นเธอมีความสุข ก็มีความสุขตามไปด้วย
+
+ชอบทำตัวเหมือนเด็กน้อยขี้อ้อนขี้เล่น 
+เป็นคนที่เข้ามาทำให้เปลี่ยนจากเป็นปลาตาย 1 ปี เหลือ 1 เดือน 55555
+
+ทำให้หัดยิ้มมากขึ้น ยิ้มเป็น 
+ทำให้โลกของผมนั้นสดใสสุดๆ ฟุดๆ ไปเบย
+
+เธอเป็นคนที่ใส่ใจเอามากๆ 
+เธอจะชอบโน๊ตเรื่องราวของเราเก็บเอาไว้ทุกเรื่อง
+
+เป็นคนที่ใช่ตั้งแต่แรกพบ 
+ผมหลงเสน่ห์รอยยิ้มและดวงตาที่น่ารักสดใสของเธอ
+ไม่สามารถหยุดมองมันได้เลย
+
+เมื่อมองที่ไร ก็ทำให้ผมนั้นหลุดยิ้มออกมาได้ตลอด 
+และเป็นคนแรกที่ผมคิดว่า คนนี้แหละคือคนที่ผมอยากใช้ชีวิตไปกับเธอ
+
+ผมคิดถึงอนาคต วางแผน 
+คิดเรื่องงานแต่ง คิดเรื่องที่อยากจะมีลูกด้วยกัน
+ถ้าได้มีบีมในเวอร์ชั่นที่ตัวเล็ก ก็น่าจะดีนะ 
+
+ความคิดเหล่านี้ผมไม่เคยจะคิดถึงมันเลย จนได้มาพบเธอ 
+
+อยากไปเที่ยวด้วยกันเยอะๆ 
+หาของอร่อยๆ กินกันเยอะๆ 
+ถ่ายรูปด้วยกันเยอะๆ 
+หากิจกรรมทำร่วมกันเยอะๆ
+
+ผมเป็นคนที่ติดห้องมาก ไม่ค่อยอยากออกไปไหนทำอะไร
+อยู่ห้องก็แค่สั่งข้าว 
+
+แต่พอมีเธอยู่ในชีวิต ผมก็ต้องคิดมากขึ้น วางแผนมากขึ้น
+มันเป็นเรื่องดีนะ การได้ออกไปใช้ชีวิตด้วยกัน 🌸
+
+นี่ก็คืออีกเรื่องที่เธอเข้ามาทำให้ผมเปลี่ยนแปลงในทางที่ดี
+และก็คิดว่าคนนี้แหละจะเป็นคนที่จะเดินทางร่วมกันไปตลอด
+
+เค้าอยากให้เธอเป็นคนที่เดินไปด้วยกันตลอดไป ❤️`;
+
+let i=0;
+function typeConfess(){
+  const box=document.getElementById('confess');
+  if(i<loveText.length){
+    box.innerHTML+=loveText[i]==='\n'?'<br>':loveText[i];
+    i++;
+    // เลื่อนลงอัตโนมัติเมื่อพิมพ์
+    box.scrollTop = box.scrollHeight;
+    setTimeout(typeConfess,50);
+  }
+}
+
+function openLetter(){
+  home.style.display='none';
+  letter.style.display='block';
+  typeConfess();
+}
+
+function goQuestion(){
+  letter.style.display='none';
+  question.style.display='block';
+}
+
+const noBtn=document.getElementById('noBtn');
+const wrap=document.querySelector('.btn-wrap');
+noBtn.addEventListener('mouseover',runAway);
+noBtn.addEventListener('touchstart',runAway);
+function runAway(){
+  navigator.vibrate?.(120);
+  question.classList.add('shake');
+  setTimeout(()=>question.classList.remove('shake'),400);
+  noBtn.style.left=Math.random()*(wrap.offsetWidth-noBtn.offsetWidth)+'px';
+  noBtn.style.top=Math.random()*(wrap.offsetHeight-noBtn.offsetHeight)+'px';
+}
+
+/* ===== รูปลอยหลายรูป (ลูป) ===== */
+const floatingImages = [
+  'assets/0.jpg','assets/1.jpg','assets/2.jpg','assets/3.jpg','assets/4.jpg',
+  'assets/5.jpg','assets/6.jpg','assets/7.jpg','assets/8.jpg','assets/9.jpg',
+  'assets/10.jpg','assets/11.jpg','assets/12.jpg','assets/13.jpg','assets/14.jpg',
+  'assets/15.jpg','assets/16.jpg','assets/17.jpg','assets/18.jpg','assets/19.jpg',
+  'assets/20.jpg','assets/21.jpg','assets/22.jpg','assets/23.jpg','assets/24.jpg',
+  'assets/25.jpg','assets/26.jpg','assets/27.jpg','assets/28.jpg','assets/29.jpg',
+  'assets/30.jpg','assets/31.jpg','assets/32.jpg','assets/33.jpg'
+];
+
+function startFloatingPhotos(){
+  setInterval(()=>{
+    const img=document.createElement('img');
+    img.src=floatingImages[Math.floor(Math.random()*floatingImages.length)];
+    img.className='floating-photo';
+    img.style.left=Math.random()*window.innerWidth+'px';
+    img.style.animationDuration=8+Math.random()*4+'s';
+    document.body.appendChild(img);
+    setTimeout(()=>img.remove(),12000);
+  },600);
+}
+
+/* ===== หัวใจลอย (ลูป) ===== */
+function startFloatingHearts(){
+  const hearts = ['❤️', '💕', '💖', '💗', '💓', '💝', '💘', '🤍'];
+  setInterval(()=>{
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.innerHTML = hearts[Math.floor(Math.random()*hearts.length)];
+    heart.style.left = Math.random()*window.innerWidth+'px';
+    heart.style.fontSize = (25 + Math.random()*20)+'px';
+    heart.style.animationDuration = (6 + Math.random()*4)+'s';
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),10000);
+  },400);
+}
+
+/* ===== พลุแบบสมจริง (ลูป) ===== */
+function startFireworks(){
+  // ยิงพลุแบบสุ่มอย่างต่อเนื่อง
+  setInterval(()=>{
+    const types = ['star', 'circle', 'willow', 'heart'];
+    const type = types[Math.floor(Math.random()*types.length)];
+    launchRocket(type);
+  },800); // ยิงทุกๆ 800ms
+}
+
+function launchRocket(type){
+  const rocket=document.createElement('div');
+  rocket.className='rocket';
+  const x=Math.random()*window.innerWidth;
+  rocket.style.left=x+'px';
+  document.body.appendChild(rocket);
+
+  setTimeout(()=>{
+    rocket.remove();
+    const y = window.innerHeight*0.2 + Math.random()*window.innerHeight*0.3;
+    explodeFirework(x, y, type);
+  },1000);
+}
+
+function explodeFirework(x, y, type){
+  const colors = [
+    '#ff006e', '#fb5607', '#ffbe0b', '#8338ec', '#3a86ff',
+    '#06ffa5', '#ff006e', '#f72585', '#4cc9f0', '#4361ee'
+  ];
+  
+  let particleCount, createParticle;
+  
+  switch(type){
+    case 'star':
+      particleCount = 50;
+      createParticle = (angle, speed, color) => {
+        const p = document.createElement('div');
+        p.className = 'spark star';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.background = color;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+        p.style.setProperty('--x', dx + 'px');
+        p.style.setProperty('--y', dy + 'px');
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1500);
+      };
+      for(let i = 0; i < particleCount; i++){
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const speed = 150 + Math.random() * 100;
+        createParticle(angle, speed, colors[Math.floor(Math.random()*colors.length)]);
+      }
+      break;
+      
+    case 'circle':
+      particleCount = 60;
+      createParticle = (angle, speed, color) => {
+        const p = document.createElement('div');
+        p.className = 'spark circle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.background = color;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+        p.style.setProperty('--x', dx + 'px');
+        p.style.setProperty('--y', dy + 'px');
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 1800);
+      };
+      for(let i = 0; i < particleCount; i++){
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const speed = 200 + Math.random() * 50;
+        createParticle(angle, speed, colors[Math.floor(Math.random()*colors.length)]);
+      }
+      break;
+      
+    case 'willow':
+      particleCount = 40;
+      const mainColor = colors[Math.floor(Math.random()*colors.length)];
+      for(let i = 0; i < particleCount; i++){
+        const p = document.createElement('div');
+        p.className = 'spark willow';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.background = mainColor;
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const speed = 150 + Math.random() * 80;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed - 50;
+        p.style.setProperty('--x', dx + 'px');
+        p.style.setProperty('--y', dy + 'px');
+        p.style.setProperty('--rot', Math.random() * 360 + 'deg');
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+      }
+      break;
+      
+    case 'heart':
+      particleCount = 30;
+      const heartColor = '#ff006e';
+      // วาดรูปหัวใจ
+      for(let i = 0; i < particleCount; i++){
+        const p = document.createElement('div');
+        p.className = 'spark heart';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.background = heartColor;
+        p.innerHTML = '💕';
+        p.style.fontSize = '12px';
+        const t = (i / particleCount) * Math.PI * 2;
+        const hx = 16 * Math.pow(Math.sin(t), 3);
+        const hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+        p.style.setProperty('--x', hx * 15 + 'px');
+        p.style.setProperty('--y', hy * 15 + 'px');
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 2000);
+      }
+      break;
+  }
+}
+
+function yesAnswer(){
+  question.style.display='none';
+  final.style.display='block';
+  const audio=document.getElementById('music');
+  if(audio) audio.play().catch(()=>{});
+
+  const ending=`สุขสันต์วันเกิดและวันวาเลนไทน์นะและวันนี้จะเป็นวันครบรอบของเราด้วย 💖
+เค้าอยากให้เธอรู้ว่าเธอคือคนสำคัญที่สุด เป็นเหมือนโลกทั้งใบของเค้า
+
+ขอให้ทุกวันของเธอเต็มไปด้วยรอยยิ้ม
+เสียงหัวเราะ และความสุขเล็กๆ รอบตัว
+
+เค้าจะอยู่ข้างๆ คอยดูแล คอยซัพพอร์ต
+และคอยรักเธอแบบนี้ไปทุกวันเลยนะ`;
+
+  let j=0;
+  const box=document.getElementById('finalText');
+  box.innerHTML='';
+  function typeEnd(){
+    if(j<ending.length){
+      box.innerHTML+=ending[j]==='\n'?'<br>':ending[j];
+      j++;
+      // เลื่อนหน้า card ลงอัตโนมัติเมื่อพิมพ์
+      final.scrollTop = final.scrollHeight;
+      setTimeout(typeEnd,80);
+    }
+  }
+  typeEnd();
+
+  startFloatingPhotos();
+  startFloatingHearts();
+  startFireworks(); // เปลี่ยนเป็นพลุแบบลูป
+}
+</script>
+</body>
+</html>
